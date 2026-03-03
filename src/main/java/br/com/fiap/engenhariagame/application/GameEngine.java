@@ -2,24 +2,29 @@ package br.com.fiap.engenhariagame.application;
 
 import br.com.fiap.engenhariagame.domain.Mission;
 import br.com.fiap.engenhariagame.domain.Player;
-import br.com.fiap.engenhariagame.service.BasicMissionValidatorService;
+import br.com.fiap.engenhariagame.service.MissionValidatorService;
+import br.com.fiap.engenhariagame.service.ScoreService;
 
 public class GameEngine {
-    private BasicMissionValidatorService validator;
+    private final MissionValidatorService validator;
+    private final ScoreService scoreService;
 
-    public GameEngine(BasicMissionValidatorService validator) {
-        this.validator = new BasicMissionValidatorService();
+    // Injeção de Dependência via Construtor
+    public GameEngine(MissionValidatorService validator, ScoreService scoreService) {
+        this.validator = validator;
+        this.scoreService = scoreService;
     }
 
     public boolean executeMission(Player player, Mission mission) {
-        boolean sucess = validator.validate(mission);
+        boolean success = validator.validate(mission);
 
-        if(sucess) {
-            player.addScore(mission.getDifficulty() * 10);
+        if (success) {
+            int points = scoreService.calculatePoints(mission);
+            scoreService.updateScore(player, points);
         } else {
-            player.addScore(-5);
+            scoreService.updateScore(player, -5);
         }
 
-        return sucess;
+        return success;
     }
 }

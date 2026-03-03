@@ -6,15 +6,19 @@ public class Player {
 
     public Player(String name, int score) {
         this.name = name;
-        this.score = 0;
+        this.score = score; // Correção: usar o valor passado
     }
 
+    // Método para adicionar pontos (agora implementado)
     public void addScore(int points) {
-        //Implementar
+        this.score += points;
     }
-
 
     public int getScore() {
         return score;
+    }
+
+    public String getName() {
+        return name;
     }
 }
